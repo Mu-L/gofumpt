@@ -566,7 +566,10 @@ func (f *fumpter) applyPre(c *astutil.Cursor) {
 		// Do this after the joining of lone declarations above,
 		// as joining single-line declarations makes then multi-line.
 		var lastMulti bool
-		var lastEnd token.Pos
+		// Anchor the first iteration at the package clause, so that the
+		// comments before it, such as a copyright header or package doc,
+		// are not mistaken for the first declaration's own comments.
+		lastEnd := node.Name.End()
 		for _, decl := range node.Decls {
 			pos := decl.Pos()
 			// Trailing inline comments on lastEnd's line belong to the

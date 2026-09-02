@@ -4,10 +4,6 @@ cmp foo.go foo.go.golden
 exec gofumpt -d foo.go.golden
 ! stdout .
 
-# TODO: the comments before the package clause are mistaken for the first
-# declaration's own comments, so h1 is wrongly classified as multi-line and
-# gets separated from h2. The golden file below records that bug; without the
-# package doc comment, no empty line is added.
 exec gofumpt -w header.go
 cmp header.go header.go.golden
 
@@ -123,7 +119,6 @@ func h2() {
 package p
 
 func h1() { println("single line") }
-
 func h2() {
 	println("multiline")
 }
