@@ -1,3 +1,7 @@
+# TODO: joining the lines of an assignment whose token is followed by a comment
+# leaves the right-hand side at an indentation that gofmt would not produce, so
+# the "// inline" and "/* multi" cases in the golden file below are not
+# gofmt-clean. The comment should hold the two lines apart instead.
 exec gofumpt -w foo.go
 cmp foo.go foo.go.golden
 
@@ -32,6 +36,10 @@ func f() {
 		"foo"
 
 	_ = // inline
+		"foo"
+
+	_ = /* multi
+		line */
 		"foo"
 
 	long :=
@@ -70,6 +78,9 @@ func f() {
 
 	_ = // inline
 	"foo"
+
+	_ = /* multi
+	line */ "foo"
 
 	long :=
 		"foo " +
