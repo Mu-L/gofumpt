@@ -100,7 +100,7 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// TODO: fix issue 289; the comments below are detached from their imports.
+// Never move an import with comments, as they would be left behind.
 import (
 	"foo.local/pkg"
 	"os" // why we need os
@@ -207,18 +207,17 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// TODO: fix issue 289; the comments below are detached from their imports.
+// Never move an import with comments, as they would be left behind.
 import (
-	"os"
 	"strings"
 
 	"foo.local/pkg"
-	// why we need os
+	"os" // why we need os
 )
 
 import (
-	"path"
-
 	"foo.local/pkg"
+
 	// why we need path
+	"path"
 )

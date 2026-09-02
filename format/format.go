@@ -1272,9 +1272,13 @@ func (f *fumpter) joinStdImports(d *ast.GenDecl) {
 			// so that the prefix "foo" for "foo/..." does not match "foobar".
 			path == modulePrefix || strings.HasPrefix(path, modulePrefix+"/"),
 
-			// To be conservative, if an import has a name or an inline
-			// comment, and isn't part of the top group, treat it as non-std.
-			!firstGroup && (spec.Name != nil || spec.Comment != nil):
+			// To be conservative, if an import has a name
+			// and isn't part of the top group, treat it as non-std.
+			!firstGroup && spec.Name != nil,
+
+			// Moving an import leaves its comments behind, as go/printer
+			// places them by position, so never move a commented import.
+			(!firstGroup || len(other) > 0) && (spec.Doc != nil || spec.Comment != nil):
 			other = append(other, spec)
 			continue
 		}
