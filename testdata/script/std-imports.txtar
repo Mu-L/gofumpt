@@ -99,6 +99,20 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/yaml"
 )
+
+// TODO: fix issue 289; the comments below are detached from their imports.
+import (
+	"foo.local/pkg"
+	"os" // why we need os
+	"strings"
+)
+
+import (
+	"foo.local/pkg"
+
+	// why we need path
+	"path"
+)
 -- foo.go.golden --
 package p
 
@@ -191,4 +205,20 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 
 	"sigs.k8s.io/yaml"
+)
+
+// TODO: fix issue 289; the comments below are detached from their imports.
+import (
+	"os"
+	"strings"
+
+	"foo.local/pkg"
+	// why we need os
+)
+
+import (
+	"path"
+
+	"foo.local/pkg"
+	// why we need path
 )
