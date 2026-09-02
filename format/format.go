@@ -1222,7 +1222,8 @@ func (f *fumpter) joinStdImports(d *ast.GenDecl) {
 	var std, other []ast.Spec
 	firstGroup := true
 	lastEnd := d.Pos()
-	needsSort := false
+	// The original positions of the std imports which we move up.
+	var movedFrom []token.Pos
 
 	// If ModulePath is "foo/bar", we assume "foo/..." is not part of std.
 	// Users shouldn't declare modules that may collide with std this way,
@@ -1286,10 +1287,18 @@ func (f *fumpter) joinStdImports(d *ast.GenDecl) {
 		// If we're moving this std import further up, reset its
 		// position, to avoid breaking comments.
 		if !firstGroup || len(other) > 0 {
+			movedFrom = append(movedFrom, spec.Pos())
 			setPos(reflect.ValueOf(spec), d.Pos())
-			needsSort = true
 		}
 		std = append(std, spec)
+	}
+	// Moving a std import up leaves its line behind with nothing on it,
+	// which go/printer would then print as an empty line,
+	// so drop those lines from the file's line table.
+	for _, pos := range movedFrom {
+		if line := f.Line(pos); line < f.file.LineCount() {
+			f.file.MergeLine(line)
+		}
 	}
 	// Ensure there is an empty line between std imports and other imports.
 	if len(std) > 0 && len(other) > 0 && f.Line(std[len(std)-1].End())+1 >= f.Line(other[0].Pos()) {
@@ -1305,7 +1314,7 @@ func (f *fumpter) joinStdImports(d *ast.GenDecl) {
 
 	// If we moved any std imports to the first group, we need to sort them
 	// again.
-	if needsSort {
+	if len(movedFrom) > 0 {
 		ast.SortImports(f.fset, f.astFile)
 	}
 }

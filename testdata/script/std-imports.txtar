@@ -91,7 +91,7 @@ import (
 	"nodomainother/mod.withdot/pkg1"
 )
 
-// TODO: fix issue 225.
+// Moving std imports up must not leave empty lines behind; see issue 225.
 import (
 	"path/filepath"
 	"time"
@@ -178,7 +178,6 @@ import (
 	"io"
 
 	"example/foo"
-
 	"test/baz"
 )
 
@@ -196,14 +195,13 @@ import (
 	"nodomainother/mod.withdot/pkg1"
 )
 
-// TODO: fix issue 225.
+// Moving std imports up must not leave empty lines behind; see issue 225.
 import (
 	"path/filepath"
 	"time"
 
 	"github.com/tinkerbell/tink/pkg/apis/core/v1alpha1"
 	"k8s.io/apimachinery/pkg/types"
-
 	"sigs.k8s.io/yaml"
 )
 
