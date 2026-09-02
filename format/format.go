@@ -886,7 +886,9 @@ func (f *fumpter) applyPre(c *astutil.Cursor) {
 		// for simple single-value assignments. Skip multi-value assignments and
 		// binary expressions like long string concatenations, where a line break
 		// after the assignment token can improve readability.
-		if len(node.Rhs) == 1 {
+		// Skip comments in between as well, as joining their lines leaves the
+		// right-hand side at an indentation that gofmt would not produce.
+		if len(node.Rhs) == 1 && len(f.commentsBetween(node.TokPos, node.Rhs[0].Pos())) == 0 {
 			if _, ok := node.Rhs[0].(*ast.BinaryExpr); !ok {
 				f.removeLines(f.Line(node.TokPos), f.Line(node.Rhs[0].Pos()))
 			}
